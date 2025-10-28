@@ -1,0 +1,69 @@
+/* style.css */
+body {
+    font-family: Tahoma, sans-serif;
+    background-color: #007991; /* สีพื้นหลังน้ำทะเล (คล้ายๆ ในรูป) */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    background-color: #f4f4f4;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 350px;
+    text-align: center;
+}
+
+.login-container h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.5rem;
+    box-sizing: border-box; /* ทำให้ padding ไม่ขยายกล่อง */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+}
+
+.button-group button {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    width: 48%; /* แบ่งครึ่ง */
+}
+
+.button-group button[type="submit"] {
+    background-color: #4CAF50; /* สีเขียว */
+    color: white;
+}
+
+.button-group button[type="button"] {
+    background-color: #f44336; /* สีแดง */
+    color: white;
+}
