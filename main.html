@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>MK Rubber V2</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="pages.css">
+    <!-- === ลบ script ทั้งหมดออกจาก <head> === -->
+</head>
+<body>
+
+    <div class="app-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>MK Rubber</h2>
+            </div>
+            <ul class="sidebar-nav">
+                <li class="nav-item">
+                    <button class="nav-button active" data-page="setup_menu">
+                        <i data-lucide="settings"></i>
+                        <span>กำหนดข้อมูล</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-button" data-page="daily_menu">
+                        <i data-lucide="clipboard-list"></i>
+                        <span>งานประจำวัน</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-button" data-page="reports_menu">
+                        <i data-lucide="bar-chart-3"></i>
+                        <span>รายงาน</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-button" data-page="history">
+                        <i data-lucide="history"></i>
+                        <span>ข้อมูลย้อนหลัง</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-button" data-page="closeday_menu">
+                        <i data-lucide="calendar-check"></i>
+                        <span>ปิดงาน</span>
+                    </button>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="nav-button logout-button" id="logout-button">
+                    <i data-lucide="log-out"></i>
+                    <span>ออกจากระบบ</span>
+                </button>
+            </div>
+        </nav>
+
+        <main class="content-area" id="content-area">
+            <h1>ยินดีต้อนรับ</h1>
+            <p>กรุณาเลือกเมนูจากด้านข้างเพื่อเริ่มทำงาน</p>
+        </main>
+    </div>
+
+    <!-- === ย้ายสคริปต์ทั้งหมดมาไว้ที่นี่ === -->
+
+    <!-- 1. โหลด Library (Lucide) จาก CDN (Online) -->
+    <!-- วิธีนี้จะข้ามปัญหาการโหลดไฟล์ local ที่ล้มเหลว -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- 2. ลบ <script> lucide.createIcons(); </script> (inline script) ออก -->
+    <!-- เราจะย้ายไปทำใน main_renderer.js เพื่อแก้ปัญหา CSP -->
+
+    <!-- 3. โหลด Renderer ของเรา (ต้องอยู่หลัง Lucide เสมอ) -->
+    <script src="main_renderer.js"></script>
+</body>
+</html>
+
