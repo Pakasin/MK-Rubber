@@ -1,0 +1,142 @@
+/* --- สไตล์สำหรับฟอร์มในหน้า (เช่น system_params.html) --- */
+
+.page-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+/* --- ส่วนของ Form (เช่น "กำหนดข้อมูลบริษัท") --- */
+.form-section {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.form-section legend {
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 0 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-primary); /* ใช้สีจาก main.css */
+}
+
+.form-section legend i {
+    width: 20px;
+    height: 20px;
+}
+
+/* --- ตารางจัดเรียง Input --- */
+.form-grid {
+    display: grid;
+    /* 2 คอลัมน์ ขนาดเท่ากัน */
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 1.25rem;
+    margin-top: 1rem;
+}
+
+/* --- กลุ่มของ Label + Input --- */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* ทำให้ input กิน 2 คอลัมน์ */
+.form-group.span-2 {
+    grid-column: span 2;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: #333;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="date"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.form-group input[readonly] {
+    background-color: #f4f4f4;
+    cursor: not-allowed;
+}
+
+.input-group {
+    display: flex;
+    gap: 0.5rem;
+}
+.input-group input {
+    flex-grow: 1;
+}
+
+.hint {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+/* --- ปุ่ม (บันทึก / ยกเลิก) --- */
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding: 1rem;
+    border-top: 1px solid #eee;
+}
+
+/* สไตล์ปุ่มพื้นฐาน (ใช้ซ้ำได้) */
+.button-primary,
+.button-secondary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.button-primary i,
+.button-secondary i {
+    width: 20px;
+    height: 20px;
+}
+
+.button-primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+.button-primary:hover {
+    background-color: var(--color-primary-dark);
+    box-shadow: 0 4px 8px rgba(0,123,255,0.2);
+}
+
+.button-secondary {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ccc;
+}
+.button-secondary:hover {
+    background-color: #e0e0e0;
+}

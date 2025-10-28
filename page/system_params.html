@@ -1,0 +1,78 @@
+<div class="page-header">
+    <i data-lucide="sliders-horizontal"></i>
+    <h1>กำหนดข้อมูล / พารามิเตอร์ในระบบ</h1>
+</div>
+
+<!-- 
+  เราจะใช้ <form> เพื่อรวบรวมข้อมูล
+  และใช้ CSS จาก pages.css ที่เราจะสร้าง
+-->
+<form class="page-form">
+    
+    <!-- === ส่วนที่ 1: กำหนดข้อมูลบริษัท === -->
+    <fieldset class="form-section">
+        <legend>
+            <i data-lucide="building"></i>
+            <span>กำหนดข้อมูลบริษัท</span>
+        </legend>
+        
+        <div class="form-grid">
+            <div class="form-group span-2">
+                <label for="company-name">ชื่อย่อบริษัท</label>
+                <input type="text" id="company-name" value="ชอ.รับเบอร์">
+            </div>
+            <div class="form-group span-2">
+                <label for="company-address">ที่อยู่ผู้ติดต่อ</label>
+                <input type="text" id="company-address" value="55 ถ.มิตรภาพ ต.ชะอำ อ.ชะอำ จ.สงขลา">
+            </div>
+            <div class="form-group span-2">
+                <label for="company-phone">เบอร์ติดต่อ</label>
+                <input type="text" id="company-phone">
+            </div>
+            <div class="form-group span-2">
+                <label for="company-tax-id">เลขประจำตัวผู้เสียภาษี</label>
+                <input type="text" id="company-tax-id">
+            </div>
+        </div>
+    </fieldset>
+
+    <!-- === ส่วนที่ 2: ค่าคงที่ในระบบ === -->
+    <fieldset class="form-section">
+        <legend>
+            <i data-lucide="settings"></i>
+            <span>ค่าคงที่ในระบบ</span>
+        </legend>
+
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="doc-prefix">เลขที่เอกสาร</label>
+                <div class="input-group">
+                    <input type="text" id="doc-prefix" value="MKR" style="flex-basis: 80px;">
+                    <input type="text" id="doc-number" value="0183451" readonly>
+                </div>
+                <small class="hint">Format: MKR00000000</small>
+            </div>
+            <div class="form-group">
+                <label for="system-date">วันที่ทีระบบ</label>
+                <input type="text" id="system-date" value="24/10/2568" readonly>
+            </div>
+            <div class="form-group span-2">
+                <label for="purchase-rights">สิทธิ์การซื้อสะสม (วัน)</label>
+                <input type="number" id="purchase-rights" value="7">
+            </div>
+        </div>
+    </fieldset>
+
+    <!-- === ส่วนปุ่ม === -->
+    <div class="form-actions">
+        <button type="submit" class="button-primary">
+            <i data-lucide="save"></i>
+            <span>บันทึก</span>
+        </button>
+        <button type="reset" class="button-secondary">
+            <i data-lucide="x"></i>
+            <span>ยกเลิก</span>
+        </button>
+    </div>
+</form>
+
