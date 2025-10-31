@@ -18,8 +18,7 @@ const { Pool } = require("pg");
 
 // (ใช้วิธีใหม่นี้แทน)
 // 1. Connection String
-let connectionString =
-  "postgresql://postgres:datamkrubber1@db.movfghkrghhgleoinjln.supabase.co:5432/postgres";
+let connectionString =  "postgresql://postgres:datamkrubber1@db.movfghkrghhgleoinjln.supabase.co:5432/postgres";
 
 // 3. สร้าง Pool ด้วย Connection String
 const pool = new Pool({
