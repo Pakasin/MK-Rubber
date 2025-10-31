@@ -11,6 +11,7 @@
   "license": "ISC",
   "description": "��#\u0000 \u0000M\u0000K\u0000-\u0000R\u0000u\u0000b\u0000b\u0000e\u0000r\u0000\r\u0000 \u0000",
   "dependencies": {
+    "@supabase/supabase-js": "^2.78.0",
     "electron": "^39.0.0",
     "express": "^5.1.0",
     "pg": "^8.16.3"
