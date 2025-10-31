@@ -67,3 +67,9 @@ body {
     background-color: #f44336; /* สีแดง */
     color: white;
 }
+.error-text {
+  color: #ff4d4d; /* สีแดง */
+  text-align: center;
+  margin-top: 15px;
+  font-weight: bold;
+}
