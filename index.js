@@ -3,27 +3,33 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const fs = require("fs");
 
+console.log("--- [Backend] index.js is starting... ---"); // <-- LOG 1
+
 // === 1. เพิ่ม: Import ตัวเชื่อมต่อ Database ===
 const { Pool } = require("pg");
 
 // === 2. เพิ่ม: ตั้งค่าการเชื่อมต่อ Database ===
-// (อย่าลืมแก้รหัสผ่านเป็นของคุณ)
-// const pool = new Pool({
-//   user: "postgres",
-//   host: "localhost",
-//   database: "MK_Rubber", // ชื่อ Database ของคุณ
-//   password: "6610210631", // !! ใส่รหัสผ่าน PostgreSQL ของคุณตรงนี้ !!
-//   port: 5432,
-// });
-
 // (ใช้วิธีใหม่นี้แทน)
 // 1. Connection String
-let connectionString =  "postgresql://postgres:datamkrubber1@db.movfghkrghhgleoinjln.supabase.co:5432/postgres";
+// นี่คือ Connection String ที่ถูกต้องสำหรับ IPv4 Pooler
+let connectionString =
+  "postgresql://postgres.movfghkrghhgleoinjln:datamkrubber1@aws-1-ap-southeast-1.pooler.supabase.com:5432/postgres";
 
 // 3. สร้าง Pool ด้วย Connection String
 const pool = new Pool({
   connectionString: connectionString,
+  // family: 4,  <-- ไม่จำเป็นต้องใช้แล้ว เพราะ Pooler นี้รองรับ IPv4
+  connectionTimeoutMillis: 5000, // <-- ถ้าต่อไม่ได้ใน 5 วิ ให้โยน Error (แก้ค้าง)
 });
+
+// เพิ่ม: ดักจับ Error ที่การเชื่อมต่อ Pool โดยตรง
+pool.on("error", (err, client) => {
+  console.error("[Backend] POOL ERROR: Error on idle client", err);
+  process.exit(-1); // ออกจากโปรแกรมถ้า Pool พัง
+});
+
+console.log("[Backend] Pool configured with IPv4 Pooler."); // <-- LOG 2
+
 let loginWin;
 
 ipcMain.on("cancel-button-clicked", () => {
@@ -33,18 +39,17 @@ ipcMain.on("cancel-button-clicked", () => {
 
 // === 3. แก้ไข: เปลี่ยน Logic การ Login ทั้งหมด ===
 ipcMain.on("login-request", async (event, username, password) => {
-  console.log(`[Backend] ได้รับคำขอล็อกอิน: User: ${username}`);
+  console.log(`[Backend] ได้รับคำขอล็อกอิน: User: ${username}`); // <-- LOG 5 (ถ้ามาถึงนี่)
 
   // คำสั่ง SQL เช็ก Username และ รหัสผ่านที่เข้ารหัส (crypt)
-  const queryText = `
-      SELECT user_id, username, full_name, role 
-      FROM users 
-      WHERE username = $1 AND password_hash = crypt($2, password_hash)
-  `;
+  // [FIX]: แก้ไข SQL ให้เป็นบรรทัดเดียวเพื่อลบอักขระที่มองไม่เห็น (แก้ปัญหา syntax error)
+  const queryText = "SELECT user_id, username, full_name, role FROM users WHERE username = $1 AND password_hash = crypt($2, password_hash)";
 
   try {
     // รันคำสั่ง SQL
+    console.log("[Backend] Connecting to database for login...");
     const result = await pool.query(queryText, [username, password]);
+    console.log("[Backend] Query successful.");
 
     if (result.rows.length > 0) {
       // ถ้าเจอ 1 แถว = Login สำเร็จ
@@ -53,12 +58,12 @@ ipcMain.on("login-request", async (event, username, password) => {
       loginWin.close();
     } else {
       // ถ้าไม่เจอ = Login ล้มเหลว (ชื่อหรือรหัสผิด)
-      console.log("[Backend] ล็อกอินล้มเหลว");
+      console.log("[Backend] ล็อกอินล้มเหลว (ชื่อหรือรหัสผิด)");
       event.sender.send("login-fail");
     }
   } catch (err) {
-    // ถ้า Database Error (เช่น ต่อเน็ตไม่ได้, config ผิด)
-    console.error("[Backend] Database error:", err.message);
+    // ถ้า Database Error (เช่น ต่อเน็ตไม่ได้, config ผิด, timeout)
+    console.error("[Backend] DATABASE ERROR:", err.message); // แสดง error message จริง
     event.sender.send("login-fail");
   }
 });
@@ -75,6 +80,7 @@ ipcMain.on("logout-request", () => {
 
 // === 5. โหลดหน้า HTML ===
 ipcMain.handle("fetch-page", async (event, pageName) => {
+  console.log(`[Backend] Fetching page: ${pageName}`); // <-- LOG (เมื่อเปลี่ยนหน้า)
   try {
     const filePath = path.join(__dirname, "page", `${pageName}.html`);
     const data = await fs.promises.readFile(filePath, "utf8");
@@ -89,6 +95,7 @@ ipcMain.handle("fetch-page", async (event, pageName) => {
 ipcMain.handle("get-settings", async (event) => {
   console.log('[Backend] ได้รับคำขอ "ดึง" ข้อมูล Settings');
   try {
+    // [FIX]: แก้ไข SQL ให้เป็นบรรทัดเดียว
     const result = await pool.query(
       "SELECT setting_key, setting_value FROM settings"
     );
@@ -117,6 +124,7 @@ ipcMain.handle("save-settings", async (event, settingsObject) => {
     // วนลูปอัปเดตทีละค่า
     for (const key in settingsObject) {
       const value = settingsObject[key];
+      // [FIX]: แก้ไข SQL ให้เป็นบรรทัดเดียว
       await client.query(
         "UPDATE settings SET setting_value = $1 WHERE setting_key = $2",
         [value, key]
@@ -138,6 +146,7 @@ ipcMain.handle("save-settings", async (event, settingsObject) => {
 // --- ส่วนฟังก์ชันสร้างหน้าต่าง (เหมือนเดิม) ---
 
 const createMainWindow = () => {
+  console.log("[Backend] Creating MainWindow...");
   const mainWin = new BrowserWindow({
     width: 1200,
     height: 800,
@@ -150,6 +159,7 @@ const createMainWindow = () => {
 };
 
 const createWindow = () => {
+  console.log("[Backend] createWindow() is called."); // <-- LOG 4
   loginWin = new BrowserWindow({
     width: 800,
     height: 600,
@@ -164,6 +174,7 @@ const createWindow = () => {
 // --- ส่วนจัดการ App (แก้ไขเล็กน้อย) ---
 
 app.whenReady().then(() => {
+  console.log("[Backend] App is ready."); // <-- LOG 3
   createWindow();
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
@@ -175,7 +186,9 @@ app.whenReady().then(() => {
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     // === 8. แก้ไข: ปิดการเชื่อมต่อ Database ก่อนปิดโปรแกรม ===
+    console.log("[Backend] All windows closed, quitting app...");
     pool.end();
     app.quit();
   }
 });
+
